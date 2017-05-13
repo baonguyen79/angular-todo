@@ -1,4 +1,4 @@
-var app = angular.module("TodoApp", []);
+/**/var app = angular.module("TodoApp", []);
 
 app.controller("NavCtrl", ($scope) => {
 	$scope.cat = "Meow";
