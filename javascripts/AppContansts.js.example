@@ -1,0 +1,9 @@
+app.constants("FIREBASE_CONFIG", {
+var config = {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: ""
+  });
