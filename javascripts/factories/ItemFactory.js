@@ -1,4 +1,5 @@
 app.factory("ItemFactory", function($http, $q, FIREBASE_CONFIG){  
+  
   let getItemList = () => {
     let itemz = [];
     return $q((resolve, reject) => {
@@ -18,6 +19,19 @@ app.factory("ItemFactory", function($http, $q, FIREBASE_CONFIG){
       });
     });
   };
+
+  let getSingleItem = (id) => {
+    return $q((resolve, reject) => {
+      $http.get(`${FIREBASE_CONFIG.databaseURL}/items/${id}.json`)
+      .then ((resultz) => {
+        resultz.data.id = id;
+        resolve(resultz);
+      }).catch((error) => {
+         reject(error);
+      });
+    });
+  };
+
 
   let postNewItem = (newItem) => {
     return $q((resolve, reject) =>{
@@ -41,11 +55,26 @@ app.factory("ItemFactory", function($http, $q, FIREBASE_CONFIG){
     })
   };
 
+  let editItem = (item) => {
+    return $q((resolve, reject) => {
+      $http.put(`${FIREBASE_CONFIG.databaseURL}/items/${item.id}.json`, 
+        JSON.stringify({
+          assignedTo: item.assignedTo,
+          isCompleted: item.isCompleted,
+          task: item.task
+        })
+        ).then((resultz) => {
+          resolve(resultz);
+        }).catch((error) => {
+          reject(error);
+        });
+    });
+  };
 
 
 
 
-  return {getItemList:getItemList, postNewItem:postNewItem, deletz:deletz};
+  return {getItemList:getItemList, getSingleItem:getSingleItem, postNewItem:postNewItem, deletz:deletz, editItem:editItem};
 
 
 });
