@@ -1,33 +1,75 @@
-app.run(function(FIREBASE_CONFIG) {              //run config from AppConstants.js
+// 
+let isAuth = (AuthFactory) => new Promise ((resolve, reject) => {
+  if(AuthFactory.isAuthenticated()){
+    // console.log("User is authenticated, resolve route promise");
+    resolve();  //if true
+  } else {
+    // console.log("User is not authenticated, reject route promise");
+    reject(); //if false
+  }
+});
+
+app.run(function($location, $rootScope, FIREBASE_CONFIG, AuthFactory) {
   firebase.initializeApp(FIREBASE_CONFIG);
+
+  //watch method that fires on change of a route.  3 inputs. 
+  // $routeChangeStart : when url change
+  //event is a change event
+  //currRoute is information about your current route
+  //prevRoute is information about the route you came from
+  $rootScope.$on('$routeChangeStart', function(event, currRoute, prevRoute) { 
+    // checks to see if there is a current user
+    var logged = AuthFactory.isAuthenticated();
+
+    var appTo;
+
+    // to keep error from being thrown on page refresh
+    if (currRoute.originalPath) {
+      // check if the user is going to the auth page = currRoute.originalPath
+      // if user is on auth page then appTo is true
+      // if it finds something other than /auth it return a -1 and -1!==-1 so resolves to false
+      appTo = currRoute.originalPath.indexOf('/auth') !== -1;
+    }
+
+    //if not on /auth page AND not logged in redirect to /auth
+    if (!appTo && !logged) {
+      event.preventDefault();
+      $location.path('/auth');
+    }
+  });
 });
 
 
 app.config(function($routeProvider) {
   $routeProvider
-  .when('/items/list', {
-     templateUrl: 'partials/item-list.html',
-     controller: 'ItemListCtrl'
-  })
-  .when('/items/new' , {
-     templateUrl: 'partials/item-new.html',
-     controller: 'ItemNewCtrl'
-  })
-  .when('/item/view/:id', {              //:id variable
-     templateUrl: 'partials/item-view.html',
-     controller: 'ItemViewCtrl'
-  })
-  .when('/item/edit/:id', {
-     templateUrl: 'partials/item-new.html',
-     controller: 'ItemEditCtrl'
-  })
   .when('/auth' , {
      templateUrl: 'partials/auth.html',
      controller: 'AuthCtrl'
   })
+  .when('/items/list', {
+     templateUrl: 'partials/item-list.html',
+     controller: 'ItemListCtrl',
+     resolve : {isAuth}   //is true
+  })
+  .when('/items/new' , {
+     templateUrl: 'partials/item-new.html',
+     controller: 'ItemNewCtrl',
+     resolve : {isAuth}   //is true
+  })
+  .when('/item/view/:id', {              //:id variable
+     templateUrl: 'partials/item-view.html',
+     controller: 'ItemViewCtrl',
+     resolve : {isAuth}   //is true
+  })
+  .when('/item/edit/:id', {
+     templateUrl: 'partials/item-new.html',
+     controller: 'ItemEditCtrl',
+     resolve : {isAuth}   //is true
+  })
   .when('/logout' , {
      templateUrl: 'partials/auth.html',
-     controller: 'AuthCtrl'
+     controller: 'AuthCtrl',
+     resolve : {isAuth}   //is true
   })
   .otherwise('/auth')
 });
