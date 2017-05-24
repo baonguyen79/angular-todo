@@ -12,15 +12,30 @@
             "task": "grade quizzes",
             "assignedTo": "Lauren",
             "dueDate": "2017-05-23T05:00:00.000Z",
-            "uid": "4WJE53tMPSgnve7K13jvHY9bbx82"
+            "uid": "cNs5HpkG80YPJbDYdMugE6vMd2v2"
         },
         "item2": {
             "isCompleted": false,
             "task": "take a nap",
             "assignedTo": "Zoe",
             "dueDate": "2017-05-23T05:00:00.000Z",
-            "uid": "4WJE53tMPSgnve7K13jvHY9bbx82"
+            "uid": "cNs5HpkG80YPJbDYdMugE6vMd2v2"
         }
+    },
+    "tools": {
+        "tool0":{
+            "itemId":"item1",
+            "implement":"shovel"
+        },
+        "tool1":{
+             "itemId":"item0",
+            "implement":"shoes"
+        },
+        "tool2":{
+             "itemId":"item2",
+            "implement":"goat"
+        }
+        
     },
     "users": {
         "user0": {
