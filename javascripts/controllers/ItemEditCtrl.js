@@ -1,19 +1,19 @@
-app.controller("ItemViewCtrl", function($location, $routeParams, $scope, ItemFactory)  {
-  $scope.selectedItem = {};
+
+app.controller("ItemEditCtrl", function($location, $routeParams, $scope, ItemFactory) {
+  $scope.newTask = {};
 
   ItemFactory.getSingleItem($routeParams.id).then((results) => {
-  	$scope.newItem = results.data;
+    console.log("results", results);
+    $scope.newTask = results.data;
   }).catch((error) => {
-  	console.log("getSingleItem error", error);
-  })
+    console.log("getSingleItem", error);
+  });
 
   $scope.addNewItem = () => {
-  	ItemFactory.editItem($scope.newTask).then (() => {
-  		$location.url('/item/list');
-  	}).catch((error) => {
-  		console.log("addNewItem error", error)
-  	});
+    ItemFactory.editItem($scope.newTask).then(() => {
+      $location.url('/items/list');
+    }).catch((error) => {
+      console.log("editItem", error);
+    });
   };
-
-
 });
